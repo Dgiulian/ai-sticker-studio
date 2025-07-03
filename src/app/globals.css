@@ -1,7 +1,21 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+
+@theme {
+  --animate-float: 3s ease-in-out infinite;
+  @keyframes float {
+    0%: {
+      transform: translateY(0px);
+    }
+    50%: {
+      transform: translateY(-8px);
+    }
+    100%: {
+      transform: translateY(0px);
+    }
+  }
+}
 
 @theme inline {
   --color-background: var(--background);

@@ -83,7 +83,7 @@ export default {
             height: "0",
           },
           to: {
-            height: "var(--radix-accordion-content-height)",
+            height: "var(--radix-accordion-content-height)", // This variable is usually set by Radix UI's Accordion component
           },
         },
         "accordion-up": {
