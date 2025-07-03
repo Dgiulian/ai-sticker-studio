@@ -198,7 +198,7 @@ export function StickerGenerator() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="aspect-square bg-gradient-to-br from-secondary/50 to-muted/50 rounded-lg border-2 border-dashed border-muted-foreground/20 flex items-center justify-center">
+              <div className="aspect-square bg-linear-to-br from-secondary/50 to-muted/50 rounded-lg border-2 border-dashed border-muted-foreground/20 flex items-center justify-center">
                 {isGenerating ? (
                   <div className="text-center space-y-4">
                     <div className="animate-bounce-gentle">

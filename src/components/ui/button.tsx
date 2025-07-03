@@ -26,11 +26,11 @@ const buttonVariants = cva(
         magic:
           "bg-gradient-primary text-primary-foreground hover:scale-105 hover:shadow-xl hover:animate-glow transition-all duration-300",
 
-        //   fun: "bg-gradient-to-r from-pink-400 via-yellow-400 to-green-400 text-white hover:scale-105 hover:shadow-lg transition-all duration-300",
+        //   fun: "bg-linear-to-r from-pink-400 via-yellow-400 to-green-400 text-white hover:scale-105 hover:shadow-lg transition-all duration-300",
         //   creative:
-        //     "bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 text-white hover:scale-105 hover:shadow-lg transition-all duration-300",
+        //     "bg-linear-to-r from-purple-400 via-pink-400 to-red-400 text-white hover:scale-105 hover:shadow-lg transition-all duration-300",
         //   magic:
-        //     "bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-700 text-white hover:scale-105 hover:shadow-xl hover:animate-glow transition-all duration-300",
+        //     "bg-linear-to-r from-blue-500 via-cyan-400 to-blue-700 text-white hover:scale-105 hover:shadow-xl hover:animate-glow transition-all duration-300",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
