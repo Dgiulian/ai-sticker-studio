@@ -4,6 +4,8 @@ Welcome to AI Sticker Studio! This is a Next.js application that allows you to g
 
 ![AI Sticker Studio](./screenshots/image.png)
 
+![Generated images](./screenshots/gallery.png)
+
 ## ✨ Features
 
 - **AI-Powered Sticker Generation**: Create stickers from text prompts.
