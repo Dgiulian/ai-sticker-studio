@@ -2,245 +2,226 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Palette, Sparkles, Download, Wand2 } from "lucide-react";
-// import sampleSticker from "@/assets/sample-sticker.png";
-
-const STICKER_STYLES = [
-  {
-    id: "cartoon",
-    name: "Cartoon",
-    description: "Fun, colorful cartoon style",
-    prompt: "cute cartoon style, bold colors, simple shapes, Disney-like",
-  },
-  {
-    id: "anime",
-    name: "Anime",
-    description: "Japanese anime aesthetic",
-    prompt: "anime manga style, expressive eyes, vibrant colors",
-  },
-  {
-    id: "pixel",
-    name: "Pixel Art",
-    description: "Retro 8-bit pixel style",
-    prompt: "pixel art style, 8-bit retro, blocky pixels, game art",
-  },
-  {
-    id: "doodle",
-    name: "Doodle",
-    description: "Hand-drawn sketch style",
-    prompt: "hand-drawn doodle style, sketchy lines, casual illustration",
-  },
-  {
-    id: "chibi",
-    name: "Chibi",
-    description: "Super cute miniature style",
-    prompt: "chibi style, extremely cute, oversized head, kawaii",
-  },
-  {
-    id: "vintage",
-    name: "Vintage",
-    description: "Retro poster aesthetic",
-    prompt: "vintage poster style, retro colors, classic illustration",
-  },
-];
-import { toast } from "sonner";
-import { Footer } from "./footer";
-import { Navigation } from "./navigation";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import {
+  Sparkles,
+  Palette,
+  Wand2,
+  Stars,
+  Heart,
+  Zap,
+  Smile,
+} from "lucide-react";
+import { StyleSelector } from "@/components/style-selector";
+import { StickerGallery } from "@/components/sticker-gallery";
+import { generateSticker } from "@/lib/sticker-generator";
 
 export function StickerGenerator() {
   const [prompt, setPrompt] = useState("");
-  const [selectedStyle, setSelectedStyle] = useState(STICKER_STYLES[0]);
+  const [selectedStyle, setSelectedStyle] = useState("cartoon");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedImage, setGeneratedImage] = useState<string | null>(null);
-  // const { toast } = useToast();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [stickers, setStickers] = useState<any[]>([]);
+  const [showGallery, setShowGallery] = useState(false);
 
-  const generateSticker = async () => {
-    if (!prompt.trim()) {
-      toast.error("Oops! 🎨", {
-        description: "Please describe what you want your sticker to look like!",
-      });
-      return;
-    }
+  const maxPromptLength = 100;
+
+  const handleGenerate = async () => {
+    if (!prompt.trim()) return;
 
     setIsGenerating(true);
 
-    try {
-      // Create a detailed prompt combining user input with style
-      const fullPrompt = `${prompt}, ${selectedStyle.prompt}, sticker design, white background, high quality, vibrant colors, clean edges, perfect for a sticker`;
+    // Simulate AI generation delay
+    await new Promise((resolve) => setTimeout(resolve, 3000));
 
-      console.log("Generating sticker with prompt:", fullPrompt);
+    const newSticker = generateSticker(prompt, selectedStyle);
+    setStickers((prev) => [newSticker, ...prev]);
+    setIsGenerating(false);
+    setShowGallery(true);
+  };
 
-      // Note: In a real app, you'd use an AI image generation API
-      // For now, we'll simulate the generation process
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-
-      toast("Sticker Generated! ✨", {
-        description: "Your awesome sticker is ready!",
-      });
-
-      // For demo purposes, we'll use our sample sticker
-      setGeneratedImage(null);
-    } catch {
-      toast.error("Generation Failed 😞", {
-        description: "Something went wrong. Please try again!",
-      });
-    } finally {
-      setIsGenerating(false);
+  const handlePromptChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value.length <= maxPromptLength) {
+      setPrompt(value);
     }
   };
 
-  const downloadSticker = () => {
-    if (!generatedImage) return;
-
-    toast("Download Started! 📥", {
-      description: "Your sticker is being downloaded!",
-    });
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-bg p-4">
-      <Navigation />
-      <div className="container mx-auto max-w-6xl">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
+      <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-8 animate-float">
-          <h1 className="text-4xl md:text-6xl font-bold text-blue-500 mb-4">
-            AI Sticker Studio
-          </h1>
-          <p className="text-lg text-muted-foreground mb-6">
-            Create hilarious and adorable stickers with the power of AI! ✨
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="p-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full">
+              <Sparkles className="w-6 h-6 text-white" />
+            </div>
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              AI Sticker Generator
+            </h1>
+          </div>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Transform your ideas into amazing stickers with AI magic! Choose
+            your style, describe your vision, and watch creativity come to life.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Generator Panel */}
-          <Card className="shadow-xl border-0 bg-card/50 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-2xl">
-                <Palette className="h-6 w-6 text-primary" />
-                Create Your Sticker
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Prompt Input */}
-              <div className="space-y-2">
-                <Label htmlFor="prompt" className="text-sm font-medium">
-                  Describe your sticker idea
-                </Label>
-                <Textarea
-                  id="prompt"
-                  placeholder="A laughing cat wearing sunglasses and a tiny hat..."
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  className="min-h-[100px] resize-none border-2 focus:border-primary transition-colors"
-                />
-              </div>
+          <div className="lg:col-span-2">
+            <Card className="backdrop-blur-sm bg-white/80 border-0 shadow-xl">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Wand2 className="w-5 h-5 text-purple-600" />
+                  Create Your Sticker
+                </CardTitle>
+                <CardDescription>
+                  Describe what you want to see and choose your preferred style
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Prompt Input */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Your Prompt</label>
+                  <div className="relative">
+                    <Input
+                      placeholder="A cute cat wearing sunglasses and a hat..."
+                      value={prompt}
+                      onChange={handlePromptChange}
+                      className="pr-16 text-base"
+                    />
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                      <Badge
+                        variant={
+                          prompt.length > 80 ? "destructive" : "secondary"
+                        }
+                      >
+                        {prompt.length}/{maxPromptLength}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
 
-              {/* Style Selection */}
-              <div className="space-y-3">
-                <Label className="text-sm font-medium">Choose a style</Label>
-                <div className="grid grid-cols-2 gap-3">
-                  {STICKER_STYLES.map((style) => (
-                    <Card
-                      key={style.id}
-                      className={`cursor-pointer transition-all duration-300 hover:scale-105 ${
-                        selectedStyle.id === style.id
-                          ? "ring-2 ring-primary shadow-lg bg-primary/5"
-                          : "hover:shadow-md"
-                      }`}
-                      onClick={() => setSelectedStyle(style)}
-                    >
-                      <CardContent className="p-3">
-                        <h3 className="font-semibold text-sm mb-1">
-                          {style.name}
-                        </h3>
-                        <p className="text-xs text-muted-foreground">
-                          {style.description}
-                        </p>
-                      </CardContent>
-                    </Card>
+                {/* Style Selector */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Art Style</label>
+                  <StyleSelector
+                    selectedStyle={selectedStyle}
+                    onStyleChange={setSelectedStyle}
+                  />
+                </div>
+
+                <Separator />
+
+                {/* Generate Button */}
+                <Button
+                  onClick={handleGenerate}
+                  disabled={!prompt.trim() || isGenerating}
+                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 transition-all duration-200 transform hover:scale-105"
+                >
+                  {isGenerating ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Generating Magic...
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <Stars className="w-4 h-4" />
+                      Generate Sticker
+                    </div>
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Info Panel */}
+          <div className="space-y-6">
+            <Card className="backdrop-blur-sm bg-white/80 border-0 shadow-xl">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Palette className="w-5 h-5 text-orange-600" />
+                  Tips for Great Stickers
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <Heart className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium text-sm">Be Specific</p>
+                      <p className="text-xs text-gray-600">
+                        Include colors, emotions, and details
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <Zap className="w-4 h-4 text-yellow-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium text-sm">Keep it Simple</p>
+                      <p className="text-xs text-gray-600">
+                        Single subjects work best for stickers
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <Smile className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-medium text-sm">Have Fun</p>
+                      <p className="text-xs text-gray-600">
+                        Experiment with different styles
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="backdrop-blur-sm bg-white/80 border-0 shadow-xl">
+              <CardHeader>
+                <CardTitle className="text-sm">Popular Styles</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    "Cartoon",
+                    "Realistic",
+                    "Minimalist",
+                    "Pixel Art",
+                    "Watercolor",
+                    "Sketch",
+                  ].map((style) => (
+                    <Badge key={style} variant="outline" className="text-xs">
+                      {style}
+                    </Badge>
                   ))}
                 </div>
-              </div>
-
-              {/* Generate Button */}
-              <Button
-                onClick={generateSticker}
-                disabled={isGenerating}
-                variant="magic"
-                size="xl"
-                className="w-full"
-              >
-                {isGenerating ? (
-                  <>
-                    <Sparkles className="h-5 w-5 animate-spin" />
-                    Creating Magic...
-                  </>
-                ) : (
-                  <>
-                    <Wand2 className="h-5 w-5" />
-                    Generate Sticker
-                  </>
-                )}
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Preview Panel */}
-          <Card className="shadow-xl border-0 bg-card/50 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-2xl">
-                <Sparkles className="h-6 w-6 text-accent" />
-                Your Sticker
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="aspect-square bg-linear-to-br from-secondary/50 to-muted/50 rounded-lg border-2 border-dashed border-muted-foreground/20 flex items-center justify-center">
-                {isGenerating ? (
-                  <div className="text-center space-y-4">
-                    <div className="animate-bounce-gentle">
-                      <Sparkles className="h-16 w-16 text-primary mx-auto" />
-                    </div>
-                    <p className="text-muted-foreground">
-                      Generating your sticker...
-                    </p>
-                  </div>
-                ) : generatedImage ? (
-                  <div className="text-center space-y-4">
-                    <div className="bg-white p-4 rounded-lg shadow-lg">
-                      <img
-                        src={generatedImage}
-                        alt="Generated sticker"
-                        className="w-full h-40 object-contain"
-                      />
-                    </div>
-                    <Button
-                      onClick={downloadSticker}
-                      variant="fun"
-                      size="lg"
-                      className="w-full"
-                    >
-                      <Download className="h-4 w-4" />
-                      Download Sticker
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="text-center space-y-2">
-                    <Palette className="h-16 w-16 text-muted-foreground/50 mx-auto" />
-                    <p className="text-muted-foreground">
-                      Your sticker will appear here
-                    </p>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
-        <Footer />
+        {/* Sticker Gallery */}
+        {showGallery && (
+          <div className="mt-12">
+            <div className="flex items-center gap-2 mb-6">
+              <h2 className="text-2xl font-bold text-gray-800">
+                Your Stickers
+              </h2>
+              <Badge variant="secondary">{stickers.length}</Badge>
+            </div>
+            <StickerGallery stickers={stickers} />
+          </div>
+        )}
       </div>
     </div>
   );

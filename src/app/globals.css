@@ -1,20 +1,41 @@
 @import "tailwindcss";
+@import "tailwind-animate";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&: is(.dark *));
 
 @theme {
-  --animate-float: 3s ease-in-out infinite;
+  --animate-float: float 3s ease-in-out infinite;
   @keyframes float {
-    0%: {
+    0%,
+    100% {
       transform: translateY(0px);
     }
-    50%: {
+    50% {
       transform: translateY(-8px);
     }
-    100%: {
-      transform: translateY(0px);
-    }
   }
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(
+    135deg,
+    hsl(var(--color-primary)),
+    hsl(var(--color-primary-glow))
+  );
+  --gradient-fun: linear-gradient(
+    135deg,
+    hsl(var(--color-fun)),
+    hsl(var(--color-accent))
+  );
+  --gradient-creative: linear-gradient(
+    135deg,
+    hsl(var(--color-creative)),
+    hsl(var(--color-accent))
+  );
+  --gradient-bg: linear-gradient(
+    180deg,
+    hsl(var(--color-background)),
+    hsl(var(--color-secondary))
+  );
 }
 
 @theme inline {
@@ -72,6 +93,10 @@
   --primary: 280 100% 65%;
   --primary-foreground: 0 0% 100%;
   --primary-glow: 285 85% 75%;
+  
+  --color-primary: hsl(var(--primary))
+  --color-primary-glow: hsl(var(--primary-glow))
+
 
   --secondary: 320 25% 95%;
   --secondary-foreground: 340 15% 15%;
@@ -95,24 +120,6 @@
   --input: 320 15% 92%;
   --ring: 280 100% 65%;
 
-  /* Gradients */
-  --gradient-primary: linear-gradient(
-    135deg,
-    hsl(var(--primary)),
-    hsl(var(--primary-glow))
-  );
-  --gradient-fun: linear-gradient(135deg, hsl(var(--fun)), hsl(var(--accent)));
-  --gradient-creative: linear-gradient(
-    135deg,
-    hsl(var(--creative)),
-    hsl(var(--accent))
-  );
-  --gradient-bg: linear-gradient(
-    180deg,
-    hsl(var(--background)),
-    hsl(var(--secondary))
-  );
-
   /* Animations */
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -132,6 +139,18 @@
   --sidebar-border: 220 13% 91%;
 
   --sidebar-ring: 217.2 91.2% 59.8%;
+
+  --animate-fade-in-scale: fade-in-scale 0.3s ease-out;
+  @keyframes fade-in-scale {
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 }
 
 .dark {
@@ -179,4 +198,12 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.bg-gradient-primary2 {
+  background-image: linear-gradient(
+    135deg,
+    hsl(var(--primary)),
+    hsl(var(--primary-foreground))
+  );
 }
