@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -26,6 +25,7 @@ import { StickerGallery } from "@/components/sticker-gallery";
 import { generateSticker } from "@/lib/sticker-generator";
 import { Footer } from "./footer";
 import { Navigation } from "./navigation";
+import { Textarea } from "./ui/textarea";
 
 export function StickerGenerator() {
   const [prompt, setPrompt] = useState("");
@@ -51,7 +51,7 @@ export function StickerGenerator() {
     setShowGallery(true);
   };
 
-  const handlePromptChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     if (value.length <= maxPromptLength) {
       setPrompt(value);
@@ -93,10 +93,18 @@ export function StickerGenerator() {
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Prompt Input */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Your Prompt</label>
+                <div className="space-y-4">
+                  <label className="text-sm font-medium mb-4">
+                    Your Prompt
+                  </label>
                   <div className="relative">
-                    <Input
+                    <Textarea
+                      rows={3}
+                      maxLength={maxPromptLength}
+                      autoFocus
+                      autoComplete="off"
+                      autoCorrect="off"
+                      spellCheck="false"
                       placeholder="A cute cat wearing sunglasses and a hat..."
                       value={prompt}
                       onChange={handlePromptChange}
