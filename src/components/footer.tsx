@@ -16,6 +16,22 @@ export const Footer = () => {
         <span>📱 Mobile Friendly</span>
         <span>💫 Unlimited Fun</span>
       </div>
+      <div>
+        <p className="text-xs text-muted-foreground my-4">
+          &copy; {new Date().getFullYear()} AI Sticker Studio.
+          <span>
+            Created with ❤️ by{" "}
+            <a
+              href="https://giuliani-diego.ar"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Diego Giuliani
+            </a>{" "}
+            - All rights reserved.
+          </span>
+        </p>
+      </div>
     </footer>
   );
 };
