@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +10,7 @@ interface Sticker {
   id: string;
   prompt: string;
   style: string;
-  imageUrl: string;
+  image: Uint8Array;
   createdAt: string;
 }
 
@@ -21,7 +22,7 @@ export function StickerGallery({ stickers }: StickerGalleryProps) {
   const handleDownload = (sticker: Sticker) => {
     // Simulate download
     const link = document.createElement("a");
-    link.href = sticker.imageUrl;
+    link.href = URL.createObjectURL(new Blob([sticker.image]));
     link.download = `sticker-${sticker.id}.png`;
     link.click();
   };
@@ -34,10 +35,13 @@ export function StickerGallery({ stickers }: StickerGalleryProps) {
           className="overflow-hidden backdrop-blur-sm bg-white/80 border-0 shadow-lg hover:shadow-xl transition-shadow duration-200"
         >
           <div className="aspect-square bg-gradient-to-br from-purple-100 to-pink-100 relative overflow-hidden">
-            <img
-              src={sticker.imageUrl}
+            <Image
+              src={URL.createObjectURL(
+                new Blob([sticker.image], { type: "image/png" })
+              )}
               alt={sticker.prompt}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
           </div>

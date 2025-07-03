@@ -26,6 +26,7 @@ import { generateSticker } from "@/lib/sticker-generator";
 import { Footer } from "./footer";
 import { Navigation } from "./navigation";
 import { Textarea } from "./ui/textarea";
+import { Toaster, toast } from "sonner";
 
 export function StickerGenerator() {
   const [prompt, setPrompt] = useState("");
@@ -42,13 +43,16 @@ export function StickerGenerator() {
 
     setIsGenerating(true);
 
-    // Simulate AI generation delay
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-
-    const newSticker = generateSticker(prompt, selectedStyle);
-    setStickers((prev) => [newSticker, ...prev]);
-    setIsGenerating(false);
-    setShowGallery(true);
+    try {
+      const newStickers = await generateSticker(prompt, selectedStyle);
+      setStickers((prev) => [...newStickers, ...prev]);
+      setShowGallery(true);
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const handlePromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -60,6 +64,7 @@ export function StickerGenerator() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 overflow-hidden">
+      <Toaster />
       <div className="container mx-auto px-4 py-8">
         <Navigation />
         {/* Header */}
